@@ -37,8 +37,19 @@ const addCandidates = (req, res) => {
             let candidates = []
             try {
                 rows.forEach((row) => {
+                    console.log(row[4], row[6])
                     if (!validCTCs.includes(row[4])) {
                         throw new Error('Currency could only be of type EUR, USD or INR')
+                    }
+
+                    if (row[4].toUpperCase() === 'INR') {
+                        if (!!!(row[6].toUpperCase() == 'LAKHS' || row[6].toUpperCase() == 'CRORES')) {
+                            throw new Error('INR could only be in LAKHS or CRORES format')
+                        }
+                    } else {
+                        if (!!!(row[6].toUpperCase() == 'THOUSANDS' || row[6].toUpperCase() == 'MILLIONS')) {
+                            throw new Error('EUR or USD could only be in THOUSANDS or MILLIONS format')
+                        }
                     }
 
                     let candidate_data = {
